@@ -1,9 +1,16 @@
 version: '3.7'
 
 services:
+  chat-server:
+    container_name: chat-server
+    build:
+      context: chat-server
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
 
-  chat-app:
-    container_name: chat-app
+  chat-web-app:
+    container_name: chat-web-app
     build:
       context: chat-web-app
       dockerfile: Dockerfile
