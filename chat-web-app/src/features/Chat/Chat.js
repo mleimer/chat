@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
-import {makeStyles} from "@material-ui/core/styles";
-import ChatMessageList from "./ChatMessageList/ChatMessageList";
-import {loadMessages, postMessage, subscribeOnNewMessages} from "../../api/messageApi";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import React, {useEffect, useRef, useState} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
+import ChatMessageList from './ChatMessageList/ChatMessageList';
+import {loadMessages, postMessage, subscribeOnNewMessages} from '../../api/messageApi';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -26,7 +26,7 @@ function Chat() {
   useEffect(() => {
     loadMessages()
       .then((response) => {
-        setMessages(response.data)
+        setMessages(response.data);
       });
   }, [setMessages]);
 
@@ -46,7 +46,12 @@ function Chat() {
         <Button onClick={() => postMessage({userName, message})} variant="contained" color="primary">Send</Button>
       </form>
     </div>
-  )
+  );
 }
+
+
+Chat.propTypes = {};
+
+Chat.defaultProps = {};
 
 export default Chat;

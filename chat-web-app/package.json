@@ -15,17 +15,26 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-react": "^7.20.3",
+    "prop-types": "^15.7.2",
     "react-scripts": "3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.js"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
