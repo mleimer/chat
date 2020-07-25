@@ -1,9 +1,15 @@
 package com.mleimer.chat.message;
 
+import com.mleimer.chat.repository.MessageRepository;
+import com.mleimer.chat.repository.model.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -16,6 +22,7 @@ import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -32,21 +39,29 @@ public class MessageControllerTest {
     @LocalServerPort
     private int port;
 
-    private String URL;
+    private String WEBSOCKET_URL;
+    private String REST_URL;
 
     private static final String SEND_MESSAGE_ENDPOINT = "/app/message";
     private static final String SUBSCRIBE_MESSAGES = "/topic/message";
 
     private CompletableFuture<MessageDto> completableFuture;
 
+    @Autowired
+    private MessageRepository messageRepository;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
     @BeforeEach
     public void setup() {
         completableFuture = new CompletableFuture<>();
-        URL = "ws://localhost:" + port + "/chat";
+        WEBSOCKET_URL = "ws://localhost:" + port + "/chat";
+        REST_URL = "http://localhost:" + port;
     }
 
     @Test
-    public void testSendMessageAndAwaitBroadcast() throws InterruptedException, ExecutionException, TimeoutException {
+    public void givenNewMessage_whenPostMessage_shouldBroadcastThatMessage() throws InterruptedException, ExecutionException, TimeoutException {
         final String messageContent = "Hello world!";
         final String userName = "Smartin";
 
@@ -64,13 +79,46 @@ public class MessageControllerTest {
         assertEquals(userName, receivedMessage.getUserName());
     }
 
+    @Test
+    public void givenPersistedMessages_whenGetMessages_shouldReturnSavedMessages() {
+        String userName1 = "Smartin";
+        String userName2 = "Charlie";
+
+        String messageContent1 = "Hey Charlie!";
+        String messageContent2 = "Hey Smartin, how are you?";
+
+        Message message1 = Message.builder().userName(userName1).message(messageContent1).timestamp(LocalDateTime.of(2018, 1, 1, 12, 0, 23)).build();
+        Message message2 = Message.builder().userName(userName2).message(messageContent2).timestamp(LocalDateTime.of(2018, 1, 1, 12, 1, 14)).build();
+
+        messageRepository.save(message1);
+        messageRepository.save(message2);
+
+
+        ResponseEntity<MessageDto[]> response = this.restTemplate.getForEntity(REST_URL + "/message/", MessageDto[].class);
+
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        MessageDto[] body = response.getBody();
+        assertNotNull(body);
+
+        assertEquals(2, body.length);
+
+        assertEquals(userName1, body[0].getUserName());
+        assertEquals(messageContent1, body[0].getContent());
+
+        assertEquals(userName2, body[1].getUserName());
+        assertEquals(messageContent2, body[1].getContent());
+    }
+
     private StompSession createStompSession() throws InterruptedException, ExecutionException, TimeoutException {
         WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         StompSessionHandlerAdapter stompSessionHandlerAdapter = new StompSessionHandlerAdapter() {
         };
-        return stompClient.connect(URL, stompSessionHandlerAdapter).get(1, SECONDS);
+        return stompClient.connect(WEBSOCKET_URL, stompSessionHandlerAdapter).get(1, SECONDS);
     }
 
     private List<Transport> createTransportClient() {
