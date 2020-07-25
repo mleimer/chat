@@ -12,3 +12,10 @@ By default, the development configuration will be taken. To use production confi
 "docker-compose.yml" containing Docker config for development mode
 "docker-compose.prod.yml" containing Docker config for production mode
 
+## Open Points / Next Steps
+- Analyze Web-Security / OWASP Top10
+- Validation of user entered data
+    - UserName (Characters & Length)
+    - Message (Characters & Length)
+- Simplify/Merge Docker config to prevent having one Dockerfile for each environment
+
