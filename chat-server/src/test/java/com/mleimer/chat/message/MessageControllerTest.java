@@ -1,16 +1,14 @@
 package com.mleimer.chat.message;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
@@ -25,15 +23,15 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MessageControllerTest {
 
-    @Value("${local.server.port}")
+    @LocalServerPort
     private int port;
+
     private String URL;
 
     private static final String SEND_MESSAGE_ENDPOINT = "/app/message";
@@ -41,14 +39,14 @@ public class MessageControllerTest {
 
     private CompletableFuture<MessageDto> completableFuture;
 
-    @Before
-    public void testClassSetup() {
+    @BeforeEach
+    public void setup() {
         completableFuture = new CompletableFuture<>();
         URL = "ws://localhost:" + port + "/chat";
     }
 
     @Test
-    public void givenMessage_whenPostedToMessageEndpoint_shouldBroadcastSameMessageOnTopic() throws InterruptedException, ExecutionException, TimeoutException {
+    public void testSendMessageAndAwaitBroadcast() throws InterruptedException, ExecutionException, TimeoutException {
         final String messageContent = "Hello world!";
         final String userName = "Smartin";
 
