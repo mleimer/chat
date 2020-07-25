@@ -44,7 +44,7 @@ public class MessageControllerTest {
     private String WEBSOCKET_URL;
     private String REST_URL;
 
-    private static final String SEND_MESSAGE_ENDPOINT = "/app/message";
+    private static final String SEND_MESSAGE_ENDPOINT = "/ws/message";
     private static final String SUBSCRIBE_MESSAGES = "/topic/message";
 
     private CompletableFuture<MessageDto> completableFuture;
@@ -58,7 +58,7 @@ public class MessageControllerTest {
     @BeforeEach
     public void setup() {
         completableFuture = new CompletableFuture<>();
-        WEBSOCKET_URL = "ws://localhost:" + port + "/chat";
+        WEBSOCKET_URL = "http://localhost:" + port + "/chat";
         REST_URL = "http://localhost:" + port;
         messageRepository.deleteAll();
     }
