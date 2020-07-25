@@ -1,22 +1,11 @@
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 import React from "react";
-import Typography from "@material-ui/core/Typography";
 import {makeStyles} from "@material-ui/core/styles";
+import ChatMessageList from "./ChatMessageList/ChatMessageList";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   container: {
     display: 'flex',
     justifyContent: 'center'
-  },
-  list: {
-    width: '100%',
-    maxWidth: '500px',
-    backgroundColor: theme.palette.background.paper,
-  },
-  inline: {
-    display: 'inline',
   }
 }));
 
@@ -35,36 +24,12 @@ function Chat() {
   }, {
     content: 'I am fine, and you?',
     userName: 'Chris',
-    timestamp: '2018-07-14T14:32:35+0200'
+    timestamp: '2018-07-14T14:32:37+0200'
   }];
 
   return (
     <div className={classes.container}>
-
-      <List className={classes.list}>
-        {
-          mockMessages.map(message => (
-            <ListItem key={message.timestamp}>
-              <ListItemText
-                primary={message.content}
-                secondary={
-                  <>
-                    <Typography
-                      component="span"
-                      variant="body2"
-                      className={classes.inline}
-                      color="textPrimary"
-                    >
-                      {message.userName}
-                    </Typography>
-                    {` — ${message.timestamp}`}
-                  </>
-                }
-              />
-            </ListItem>
-          ))
-        }
-      </List>
+      <ChatMessageList messages={mockMessages}/>
     </div>
   )
 }
