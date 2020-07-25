@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import ChatMessageList from "./ChatMessageList/ChatMessageList";
+import {loadMessages} from "../../api/messageApi";
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -12,24 +13,18 @@ const useStyles = makeStyles(() => ({
 function Chat() {
 
   const classes = useStyles();
+  const [messages, setMessages] = useState([]);
 
-  const mockMessages = [{
-    content: 'Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you? Hey, how are you?',
-    userName: 'Smartin',
-    timestamp: '2018-07-14T14:31:30+0200'
-  }, {
-    content: 'I am fine, and you?',
-    userName: 'Chris',
-    timestamp: '2018-07-14T14:32:35+0200'
-  }, {
-    content: 'I am fine, and you?',
-    userName: 'Chris',
-    timestamp: '2018-07-14T14:32:37+0200'
-  }];
+  useEffect(() => {
+    loadMessages()
+      .then((response) => {
+        setMessages(response.data)
+      });
+  }, [setMessages]);
 
   return (
     <div className={classes.container}>
-      <ChatMessageList messages={mockMessages}/>
+      <ChatMessageList messages={messages}/>
     </div>
   )
 }
