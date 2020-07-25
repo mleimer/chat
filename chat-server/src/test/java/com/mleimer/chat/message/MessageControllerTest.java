@@ -81,6 +81,7 @@ public class MessageControllerTest {
         assertNotNull(receivedMessage);
         assertEquals(messageContent, receivedMessage.getContent());
         assertEquals(userName, receivedMessage.getUserName());
+        assertNotNull(receivedMessage.getTimestamp());
     }
 
     @Test
@@ -120,8 +121,11 @@ public class MessageControllerTest {
         String messageContent1 = "Hey Charlie!";
         String messageContent2 = "Hey Smartin, how are you?";
 
-        Message message1 = Message.builder().userName(userName1).message(messageContent1).timestamp(LocalDateTime.of(2018, 1, 1, 12, 0, 23)).build();
-        Message message2 = Message.builder().userName(userName2).message(messageContent2).timestamp(LocalDateTime.of(2018, 1, 1, 12, 1, 14)).build();
+        LocalDateTime timestamp1 = LocalDateTime.of(2018, 1, 1, 12, 0, 23);
+        LocalDateTime timestamp2 = LocalDateTime.of(2018, 1, 1, 12, 1, 14);
+
+        Message message1 = Message.builder().userName(userName1).message(messageContent1).timestamp(timestamp1).build();
+        Message message2 = Message.builder().userName(userName2).message(messageContent2).timestamp(timestamp2).build();
 
         messageRepository.save(message1);
         messageRepository.save(message2);
@@ -140,9 +144,11 @@ public class MessageControllerTest {
 
         assertEquals(userName1, body[0].getUserName());
         assertEquals(messageContent1, body[0].getContent());
+        assertEquals(timestamp1, body[0].getTimestamp());
 
         assertEquals(userName2, body[1].getUserName());
         assertEquals(messageContent2, body[1].getContent());
+        assertEquals(timestamp2, body[1].getTimestamp());
     }
 
     private StompSession createStompSession() throws InterruptedException, ExecutionException, TimeoutException {
