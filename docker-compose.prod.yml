@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+
+  chat-app-prod:
+    container_name: chat-app-prod
+    build:
+      context: chat-web-app
+      dockerfile: Dockerfile.prod
+    ports:
+      - '1337:80'
