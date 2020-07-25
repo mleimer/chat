@@ -28,8 +28,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.StreamSupport;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -58,29 +60,60 @@ public class MessageControllerTest {
         completableFuture = new CompletableFuture<>();
         WEBSOCKET_URL = "ws://localhost:" + port + "/chat";
         REST_URL = "http://localhost:" + port;
+        messageRepository.deleteAll();
     }
 
     @Test
     public void givenNewMessage_whenPostMessage_shouldBroadcastThatMessage() throws InterruptedException, ExecutionException, TimeoutException {
+        // Given
         final String messageContent = "Hello world!";
         final String userName = "Smartin";
 
-        StompSession stompSession = createStompSession();
-
         MessageDto messageDto = MessageDto.builder().content(messageContent).userName(userName).build();
 
+        // When
+        StompSession stompSession = createStompSession();
         stompSession.subscribe(SUBSCRIBE_MESSAGES, new CreateMessageDtoStompFrameHandler());
         stompSession.send(SEND_MESSAGE_ENDPOINT, messageDto);
-
         MessageDto receivedMessage = completableFuture.get(5, SECONDS);
 
+        // Then
         assertNotNull(receivedMessage);
         assertEquals(messageContent, receivedMessage.getContent());
         assertEquals(userName, receivedMessage.getUserName());
     }
 
     @Test
+    public void givenNewMessage_whenPostMessage_shouldPersistMessage() throws InterruptedException, ExecutionException, TimeoutException {
+        // Given
+        final String messageContent = "Hello world!";
+        final String userName = "Smartin";
+
+        MessageDto messageDto = MessageDto.builder().content(messageContent).userName(userName).build();
+
+        // When
+        StompSession stompSession = createStompSession();
+        stompSession.subscribe(SUBSCRIBE_MESSAGES, new CreateMessageDtoStompFrameHandler());
+        stompSession.send(SEND_MESSAGE_ENDPOINT, messageDto);
+        completableFuture.get(5, SECONDS);
+
+        // Then
+        List<Message> persistedMessages = StreamSupport
+                .stream(messageRepository.findAll().spliterator(), false)
+                .collect(toList());
+
+        assertNotNull(persistedMessages);
+        assertEquals(1, persistedMessages.size());
+
+        Message persistedMessage = persistedMessages.get(0);
+        assertEquals(userName, persistedMessage.getUserName());
+        assertEquals(messageContent, persistedMessage.getMessage());
+        assertNotNull(persistedMessage.getTimestamp());
+    }
+
+    @Test
     public void givenPersistedMessages_whenGetMessages_shouldReturnSavedMessages() {
+        // Given
         String userName1 = "Smartin";
         String userName2 = "Charlie";
 
@@ -93,10 +126,10 @@ public class MessageControllerTest {
         messageRepository.save(message1);
         messageRepository.save(message2);
 
-
+        // When
         ResponseEntity<MessageDto[]> response = this.restTemplate.getForEntity(REST_URL + "/message/", MessageDto[].class);
 
-
+        // Then
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
 

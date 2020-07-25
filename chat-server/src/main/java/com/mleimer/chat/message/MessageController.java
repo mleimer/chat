@@ -18,7 +18,7 @@ public class MessageController {
     @MessageMapping("/message")
     @SendTo("/topic/message")
     public MessageDto postMessage(MessageDto messageDto) {
-        return messageDto;
+        return messageService.saveMessage(messageDto);
     }
 
     @GetMapping("/message")
