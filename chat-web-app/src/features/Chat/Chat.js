@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import ChatMessageList from "./ChatMessageList/ChatMessageList";
-import {loadMessages} from "../../api/messageApi";
+import {loadMessages, postMessage, subscribeOnNewMessages} from "../../api/messageApi";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
@@ -9,6 +9,7 @@ const useStyles = makeStyles(() => ({
   container: {
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'column'
   }
 }));
@@ -19,6 +20,8 @@ function Chat() {
   const [messages, setMessages] = useState([]);
   const [userName, setUserName] = useState('');
   const [message, setMessage] = useState('');
+  const stateRef = useRef();
+  stateRef.current = {messages};
 
   useEffect(() => {
     loadMessages()
@@ -27,9 +30,12 @@ function Chat() {
       });
   }, [setMessages]);
 
-  const sendMessage = () => {
-    console.log(message);
-  }
+  useEffect(() => {
+    subscribeOnNewMessages((response) => {
+      let newMessages = [...stateRef.current.messages, JSON.parse(response.body)];
+      setMessages(newMessages);
+    });
+  }, []);
 
   return (
     <div className={classes.container}>
@@ -37,7 +43,7 @@ function Chat() {
       <form noValidate autoComplete="off">
         <TextField label="User name" value={userName} onChange={(event) => setUserName(event.target.value)}/>
         <TextField label="Message" value={message} onChange={(event) => setMessage(event.target.value)}/>
-        <Button onClick={sendMessage} variant="contained" color="primary">Send</Button>
+        <Button onClick={() => postMessage({userName, message})} variant="contained" color="primary">Send</Button>
       </form>
     </div>
   )
