@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {createRef, useEffect, useRef, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {loadMessages, postMessage, subscribeOnNewMessages} from '../../api/messageApi';
 import PropTypes from 'prop-types';
@@ -8,6 +8,7 @@ import ChatMessageList from './ChatMessageList/ChatMessageList';
 const useStyles = makeStyles(() => ({
   container: {
     display: 'flex',
+    textAlign: 'center',
     flexDirection: 'column',
     height: 'calc(100vh - 2rem)',
     width: '100%'
@@ -28,6 +29,7 @@ function Chat({userName}) {
 
   const classes = useStyles();
   const [messages, setMessages] = useState([]);
+  const endOfListRef = createRef();
   const stateRef = useRef();
   stateRef.current = {messages};
 
@@ -45,14 +47,22 @@ function Chat({userName}) {
     });
   }, []);
 
+  useEffect(() => {
+    if (endOfListRef) {
+      endOfListRef.current.scrollIntoView({behavior: 'smooth'});
+    }
+  }, [endOfListRef]);
+
   const sendMessage = (message) => {
     postMessage({userName, message});
   };
 
   return (
     <div className={classes.container}>
+      <h1>Chat</h1>
       <div className={classes.messageListContainer}>
         <ChatMessageList messages={messages}/>
+        <div ref={endOfListRef}/>
       </div>
       <div className={classes.inputFieldContainer}>
         <InputFieldWithSubmitButton
