@@ -1,7 +1,6 @@
 Simple Chat-App using ReactJS, STOMP, Java SprintBoot with H2-Database containerized in Docker.
 
 ## Pre-Requisites
-- NodeJS with NPM
 - Docker
 
 ## Run the application
