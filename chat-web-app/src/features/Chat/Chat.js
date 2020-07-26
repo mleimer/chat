@@ -37,13 +37,18 @@ function Chat() {
     });
   }, []);
 
+  const onSendMessage = () => {
+    postMessage({userName, message});
+    setMessage('');
+  };
+
   return (
     <div className={classes.container}>
       <ChatMessageList messages={messages}/>
       <form noValidate autoComplete="off">
         <TextField label="User name" value={userName} onChange={(event) => setUserName(event.target.value)}/>
         <TextField label="Message" value={message} onChange={(event) => setMessage(event.target.value)}/>
-        <Button onClick={() => postMessage({userName, message})} variant="contained" color="primary">Send</Button>
+        <Button onClick={onSendMessage} variant="contained" color="primary">Send</Button>
       </form>
     </div>
   );
