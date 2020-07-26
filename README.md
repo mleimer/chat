@@ -23,4 +23,28 @@ Further commands can be found on the [official Docker documentation website](htt
 - Show connection errors in UI
 - Simplify & optimize Docker configuration, eg. adding a .dockerignore file
 
+## Choices of Technology
+
+### Backend
+  
+| Dependency     | Reason                                                    | Identified Risks                                                              |
+|----------------|-----------------------------------------------------------|--------------------------------------------------------------------|
+| Java           | Backend Technology as preferred in challenge description  |                                                                    | 
+| SpringBoot     | Efficiently create Controller, Services and Repository    | Lots of hidden magic                                               |  
+| SpringSecurity | Handle general security incl. CORS                        |                                                                    |  
+| H2-Database    | Most simple in memory database                            |                                                                    |  
+| Mockito        | Simplifying mocking of test classes                       | Inappropriate usage can facilitate violation of SOLID              |
+| JUnit5         | To test the application                                   |                                                                    |
+
+### Frontend
+| Dependency     | Reason                                                    | Identified Risks                                                              |
+|----------------|-----------------------------------------------------------|--------------------------------------------------------------------|
+| React          | Efficiently develop Frontend application                  | Lacking support for very old browser versions                      | 
+| Material-UI    | Efficient creation of a good-looking, responsive design   | Big UI-framework (decreasing app performance)                      | 
+| Cross-Fetch    | To communicate with Backend using REST                    |                                                                    |  
+| STOMP.js       | To communicate with Backend using STOMP                   |                                                                    |  
+| SockJS         | To communicate with Backend using STOMP                   |                                                                    |  
+| Moment         | Transforming dates - Do not reinvent the wheel            | Rather large library, given that there is only one use case so far |  
+| Jest           | To test the application                                   |                                                                    |
+
 
