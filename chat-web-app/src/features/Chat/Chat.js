@@ -2,9 +2,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import ChatMessageList from './ChatMessageList/ChatMessageList';
 import {loadMessages, postMessage, subscribeOnNewMessages} from '../../api/messageApi';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
+import InputFieldWithSubmitButton from '../../components/InputFieldWithSubmitButton/InputFieldWithSubmitButton';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -26,7 +25,6 @@ function Chat({userName}) {
 
   const classes = useStyles();
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
   const stateRef = useRef();
   stateRef.current = {messages};
 
@@ -44,30 +42,18 @@ function Chat({userName}) {
     });
   }, []);
 
-  const onSendMessage = () => {
+  const sendMessage = (message) => {
     postMessage({userName, message});
-    setMessage('');
   };
 
   return (
     <div className={classes.container}>
       <ChatMessageList messages={messages}/>
-      <form noValidate autoComplete="off">
-        <div className={classes.messageAndButtonContainer}>
-          <TextField
-            className={classes.messageField}
-            label="Message"
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-          />
-          <Button
-            onClick={onSendMessage}
-            variant="contained"
-            color="primary">
-            Send
-          </Button>
-        </div>
-      </form>
+      <InputFieldWithSubmitButton
+        label="Message"
+        buttonValue="Send"
+        onSubmit={sendMessage}
+      />
     </div>
   );
 }
