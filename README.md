@@ -2,7 +2,6 @@ Simple Chat-App using ReactJS, STOMP, Java SprintBoot with H2-Database container
 
 ## Pre-Requisites
 - NodeJS with NPM
-- JDK 11 or higher
 - Docker
 
 ## Run the application
