@@ -39,7 +39,7 @@ function ChatMessageList({messages}) {
                     {message.userName}
                   </Typography>
                   {' — '}
-                  <Moment format="HH:mm:ss">{message.timestamp}</Moment>
+                  <Moment format="DD.MM.YYYY HH:mm:ss">{message.timestamp}</Moment>
                 </>
               }
               data-testid="message-item"
