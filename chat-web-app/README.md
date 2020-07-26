@@ -2,8 +2,7 @@
 
 This is a very simple Chat App using STOMP.js and REST to communicate with the server.
 
-## TODOs
-- Field validation (required, length & entered characters)
+## Out of scope
 - Show errors if connection cannot be built up
 
 ## Run the application
