@@ -26,8 +26,8 @@ function ChatMessageList({messages}) {
     <List className={classes.list} data-testid="message-list">
       {
         messages.map((message, i, list) => (
-          <>
-            <ListItem key={message.timestamp}>
+          <div key={message.timestamp}>
+            <ListItem>
               <ListItemText
                 primary={message.content}
                 secondary={
@@ -48,7 +48,7 @@ function ChatMessageList({messages}) {
               />
             </ListItem>
             {i + 1 < list.length && <Divider/>}
-          </>
+          </div>
         ))
       }
     </List>
