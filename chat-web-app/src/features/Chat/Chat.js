@@ -1,16 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import ChatMessageList from './ChatMessageList/ChatMessageList';
 import {loadMessages, postMessage, subscribeOnNewMessages} from '../../api/messageApi';
 import PropTypes from 'prop-types';
 import InputFieldWithSubmitButton from '../../components/InputFieldWithSubmitButton/InputFieldWithSubmitButton';
+import ChatMessageList from './ChatMessageList/ChatMessageList';
 
 const useStyles = makeStyles(() => ({
   container: {
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    height: 'calc(100vh - 2rem)',
+    width: '100%'
+  },
+  messageListContainer: {
+    flex: 1,
+    height: '100%',
+    overflow: 'auto'
   },
   inputFieldContainer: {
     boxSizing: 'border-box',
@@ -46,7 +51,9 @@ function Chat({userName}) {
 
   return (
     <div className={classes.container}>
-      <ChatMessageList messages={messages}/>
+      <div className={classes.messageListContainer}>
+        <ChatMessageList messages={messages}/>
+      </div>
       <div className={classes.inputFieldContainer}>
         <InputFieldWithSubmitButton
           id="message-field"
