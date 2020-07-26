@@ -8,7 +8,8 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
-    height: '200px'
+    height: '200px',
+    margin: '1rem'
   }
 }));
 
@@ -24,6 +25,7 @@ function Login({onConnect}) {
     <div className={classes.container} data-testid="login">
       <h1>Chat - Login</h1>
       <InputFieldWithSubmitButton
+        id="user-name-field"
         label="User name"
         buttonValue="Connect"
         onSubmit={connect}

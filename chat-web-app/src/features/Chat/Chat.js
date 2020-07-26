@@ -12,12 +12,10 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     flexDirection: 'column'
   },
-  messageAndButtonContainer: {
-    display: 'flex',
-    alignItems: 'baseline'
-  },
-  messageField: {
-    marginRight: '0.5rem'
+  inputFieldContainer: {
+    boxSizing: 'border-box',
+    padding: '1rem',
+    width: '100%'
   }
 }));
 
@@ -49,11 +47,14 @@ function Chat({userName}) {
   return (
     <div className={classes.container}>
       <ChatMessageList messages={messages}/>
-      <InputFieldWithSubmitButton
-        label="Message"
-        buttonValue="Send"
-        onSubmit={sendMessage}
-      />
+      <div className={classes.inputFieldContainer}>
+        <InputFieldWithSubmitButton
+          id="message-field"
+          label="Message"
+          buttonValue="Send"
+          onSubmit={sendMessage}
+        />
+      </div>
     </div>
   );
 }

@@ -12,7 +12,6 @@ const useStyles = makeStyles(() => ({
   content: {
     width: '100%',
     maxWidth: '750px',
-    padding: '1rem',
     margin: '1rem'
   }
 }));
