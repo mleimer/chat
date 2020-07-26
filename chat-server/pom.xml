@@ -21,6 +21,7 @@
         <junit.jupiter.version>5.6.2</junit.jupiter.version>
         <projectlombok.lombok.version>1.18.12</projectlombok.lombok.version>
         <springframework.security.version>5.3.3.RELEASE</springframework.security.version>
+        <mockito.version>3.4.4</mockito.version>
         <start-class>com.mleimer.chat.ChatApplication</start-class>
     </properties>
 
@@ -71,6 +72,12 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
