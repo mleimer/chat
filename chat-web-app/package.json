@@ -5,8 +5,10 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "axios": "^0.19.2",
+    "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-moment": "^0.9.7",
     "sockjs-client": "^1.4.0",
     "stompjs": "^2.3.3",
     "typescript": "^3.9.7"

@@ -2,6 +2,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import React from 'react';
+import Moment from 'react-moment';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
@@ -21,7 +22,7 @@ function ChatMessageList({messages}) {
   const classes = useStyles();
 
   return (
-    <List className={classes.list}>
+    <List className={classes.list} data-testid="message-list">
       {
         messages.map(message => (
           <ListItem key={message.timestamp}>
@@ -37,9 +38,11 @@ function ChatMessageList({messages}) {
                   >
                     {message.userName}
                   </Typography>
-                  {` — ${message.timestamp}`}
+                  {' — '}
+                  <Moment format="HH:mm:ss">{message.timestamp}</Moment>
                 </>
               }
+              data-testid="message-item"
             />
           </ListItem>
         ))
