@@ -12,6 +12,13 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column'
+  },
+  messageAndButtonContainer: {
+    display: 'flex',
+    alignItems: 'baseline'
+  },
+  messageField: {
+    marginRight: '0.5rem'
   }
 }));
 
@@ -46,8 +53,20 @@ function Chat({userName}) {
     <div className={classes.container}>
       <ChatMessageList messages={messages}/>
       <form noValidate autoComplete="off">
-        <TextField label="Message" value={message} onChange={(event) => setMessage(event.target.value)}/>
-        <Button onClick={onSendMessage} variant="contained" color="primary">Send</Button>
+        <div className={classes.messageAndButtonContainer}>
+          <TextField
+            className={classes.messageField}
+            label="Message"
+            value={message}
+            onChange={(event) => setMessage(event.target.value)}
+          />
+          <Button
+            onClick={onSendMessage}
+            variant="contained"
+            color="primary">
+            Send
+          </Button>
+        </div>
       </form>
     </div>
   );
