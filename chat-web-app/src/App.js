@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
   content: {
     width: '100%',
     maxWidth: '750px',
-    marginTop: '16px'
+    margin: '1rem'
   }
 }));
 
