@@ -10,7 +10,7 @@ import {makeStyles} from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   list: {
     width: '100%',
-    maxWidth: '500px',
+    overflowWrap: 'break-word',
     backgroundColor: theme.palette.background.paper
   },
   inline: {
