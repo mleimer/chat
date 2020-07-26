@@ -33,6 +33,7 @@ function Chat({userName}) {
   const stateRef = useRef();
   stateRef.current = {messages};
 
+  // load new messages upon component mounting once setMessages dependency is present
   useEffect(() => {
     loadMessages()
       .then((response) => {
@@ -40,6 +41,7 @@ function Chat({userName}) {
       });
   }, [setMessages]);
 
+  // subscribe on new messages when component mounts
   useEffect(() => {
     subscribeOnNewMessages((response) => {
       let newMessages = [...stateRef.current.messages, JSON.parse(response.body)];
@@ -47,11 +49,26 @@ function Chat({userName}) {
     });
   }, []);
 
+  // Scroll to bottom once new message is retrieved if was already scrolled to bottom
+  useEffect(() => {
+    if (endOfListRef) {
+      const isScrolledToBottom = endOfListRef.current.getBoundingClientRect().bottom <= window.innerHeight;
+      if (isScrolledToBottom) {
+        endOfListRef.current.scrollIntoView({behavior: 'smooth'});
+      }
+    }
+  }, [endOfListRef]);
+
+  // Scroll to bottom once all messages are loaded
+  const areMessagesLoaded = messages.length > 0;
   useEffect(() => {
     if (endOfListRef) {
       endOfListRef.current.scrollIntoView({behavior: 'smooth'});
     }
-  }, [endOfListRef]);
+    // dependencies do not contain endOfListRef as it shall only be triggered once all messages are loaded and not when endOfListRef gets updated
+    // eslint-disable-next-line
+  }, [areMessagesLoaded]);
+
 
   const sendMessage = (message) => {
     postMessage({userName, message});
@@ -75,7 +92,6 @@ function Chat({userName}) {
     </div>
   );
 }
-
 
 Chat.propTypes = {
   userName: PropTypes.string.isRequired
