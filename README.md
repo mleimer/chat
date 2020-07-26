@@ -20,9 +20,12 @@ Further commands can be found on the [official Docker documentation website](htt
 "docker-compose.prod.yml" containing Docker config for production mode
 
 ## Open Points / Next Steps
-- Analyze Web-Security / OWASP Top10
-- Validation of user entered data
+- Analyze Web-Security of the application in detail and take necessary actions
+- Validation of user entered data (in Frontend & Backend)
     - UserName (Characters & Length)
     - Message (Characters & Length)
-- Simplify/Merge Docker config to prevent having one Dockerfile for each environment
+    - Prevent sending message to backend if message or username is empty
+- Show connection errors in UI
+- Simplify & optimize Docker configuration, eg. adding a .dockerignore file
+
 
