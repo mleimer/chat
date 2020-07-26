@@ -6,6 +6,7 @@ import Moment from 'react-moment';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -24,27 +25,30 @@ function ChatMessageList({messages}) {
   return (
     <List className={classes.list} data-testid="message-list">
       {
-        messages.map(message => (
-          <ListItem key={message.timestamp}>
-            <ListItemText
-              primary={message.content}
-              secondary={
-                <>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.inline}
-                    color="textPrimary"
-                  >
-                    {message.userName}
-                  </Typography>
-                  {' — '}
-                  <Moment format="DD.MM.YYYY HH:mm:ss">{message.timestamp}</Moment>
-                </>
-              }
-              data-testid="message-item"
-            />
-          </ListItem>
+        messages.map((message, i, list) => (
+          <>
+            <ListItem key={message.timestamp}>
+              <ListItemText
+                primary={message.content}
+                secondary={
+                  <>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.inline}
+                      color="textPrimary"
+                    >
+                      {message.userName}
+                    </Typography>
+                    {' — '}
+                    <Moment format="DD.MM.YYYY HH:mm:ss">{message.timestamp}</Moment>
+                  </>
+                }
+                data-testid="message-item"
+              />
+            </ListItem>
+            {i + 1 < list.length && <Divider/>}
+          </>
         ))
       }
     </List>
